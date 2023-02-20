@@ -1,0 +1,35 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.eclipse.org/uml2/5.0.0/UML')/]
+
+[import org::datafoodconsortium::connector::codegen::ruby::common /]
+[import org::datafoodconsortium::connector::codegen::ruby::class /]
+[import org::datafoodconsortium::connector::codegen::ruby::umlpackage /]
+
+[template public generate(aClass: Class)]
+[comment @main /]
+[generateClass(aClass)/]
+[/template]
+
+[template public generate(aPackage: PackageImport)]
+[comment @main /]
+[generatePackageImport(aPackage)/]
+[/template]
+
+[template public generate(model: Model)]
+[comment @main /]
+[file ('../connector.rb', false, 'UTF-8')]
+module DataFoodConsortium
+	module Connector
+		require 'datafoodconsortium/connector/connector'
+		require 'datafoodconsortium/connector/json_ld_serializer'
+		require 'datafoodconsortium/connector/skos_parser_element'
+		require 'datafoodconsortium/connector/skos_parser'
+	[for (ip: PackageImport | model.packageImport->select(pi: PackageImport | pi.importedPackage.name <> 'org.datafoodconsortium.semantizer'))]
+		[for (member: NamedElement | ip.importedPackage.ownedMember->addAll(model.ownedMember)->select(ne: NamedElement | ne.oclIsTypeOf(Class)))]
+		require 'datafoodconsortium/connector/[generateFileName(member.name) /].rb'
+		[/for]
+	[/for]
+	end
+end
+[/file]
+[/template]

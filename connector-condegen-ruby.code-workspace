@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../Projets/DFC/github/semantizer-ruby"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Projets/DFC/github/connector-codegen-typescript"
+		}
+	],
+	"settings": {}
+}
