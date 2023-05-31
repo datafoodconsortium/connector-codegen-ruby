@@ -20,7 +20,7 @@ You should install Eclipse Modeling Tool, an Eclipse IDE version configured for 
 
 If not installed, you will have to install the [Acceleo framework](https://wiki.eclipse.org/Acceleo). To do so, you can use the Eclipse Marketplace following [this guide](https://wiki.eclipse.org/Acceleo/Installation).
 
-Before to launch the generation, be sure to include the `connector-codegen-common` DFC package available on [Github](https://github.com/datafoodconsortium/connector-codegen-documentation). Go to the "Dependencies" tab in the `META-INF/MANIFEST.MF` file and click the "Add" button in the "Imported packages" section.
+Before to launch the generation, be sure to include the `connector-codegen-common` DFC package available on [Github](https://github.com/datafoodconsortium/connector-codegen-common). Go to the "Dependencies" tab in the `META-INF/MANIFEST.MF` file and click the "Add" button in the "Imported packages" section.
 
 Then launch the process using the `.launch` file.
 
