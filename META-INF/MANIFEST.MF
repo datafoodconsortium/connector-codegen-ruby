@@ -21,4 +21,5 @@ Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
 Import-Package: org.datafoodconsortium.connector.codegen.common
 Export-Package: org.datafoodconsortium.connector.codegen.ruby
+Automatic-Module-Name: connector.codegen.ruby
 
