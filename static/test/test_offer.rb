@@ -9,6 +9,13 @@ class OfferTest < Minitest::Test
     assert_equal expected, actual
   end
 
+  def test_type_lookup
+    type = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Offer"
+    expected = DataFoodConsortium::Connector::Offer
+    actual = DataFoodConsortium::Connector::CLASSES[type]
+    assert_equal expected, actual
+  end
+
   def test_export_empty
     o = DataFoodConsortium::Connector::Offer.new("https://myplatform.com/o")
     actual = connector.export(o)
