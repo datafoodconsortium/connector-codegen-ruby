@@ -3,6 +3,11 @@ require "minitest/autorun"
 require 'datafoodconsortium/connector'
 
 class OfferTest < Minitest::Test
+  def test_type
+    expected = "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#Offer"
+    actual = DataFoodConsortium::Connector::Offer::SEMANTIC_TYPE
+    assert_equal expected, actual
+  end
 
   def test_export_empty
     o = DataFoodConsortium::Connector::Offer.new("https://myplatform.com/o")

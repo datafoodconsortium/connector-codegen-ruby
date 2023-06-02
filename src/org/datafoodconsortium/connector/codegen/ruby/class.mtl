@@ -32,8 +32,12 @@
 [generateImports(aClass)/]
 
 class DataFoodConsortium::Connector::[aClass.name.toUpperFirst()/][generateGeneralization(aClass)/]
-
-	[if (aClass.isSemantic() and aClass.generalization->isEmpty())]include VirtualAssembly::Semantizer::SemanticObject[/if]
+    [if (aClass.isSemantic())]
+      [if (aClass.generalization->isEmpty())]
+    include VirtualAssembly::Semantizer::SemanticObject
+      [/if]
+    SEMANTIC_TYPE = "[aClass.getValue(aClass.getAppliedStereotype('datafoodconsortium_connector::semantic'), 'map')/]".freeze
+    [/if]
 
 	[for (property: Property | aClass.ownedAttribute) separator('\n')]
 	# @return ['['/][property.type.name /][']'/]
