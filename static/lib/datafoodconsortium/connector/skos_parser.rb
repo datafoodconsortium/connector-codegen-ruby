@@ -82,6 +82,10 @@ class DataFoodConsortium::Connector::SKOSParser
         return @results
     end
 
+    def findParsedConcept(concept_id)
+      @skosConcepts[concept_id]
+    end
+
     protected
     
     def createSKOSConcept(element)
@@ -116,7 +120,6 @@ class DataFoodConsortium::Connector::SKOSParser
     
     def init()
         @results = DataFoodConsortium::Connector::SKOSInstance.new
-        @skosConcepts = {}
         @rootElements = []
         @broaders = {}
     end

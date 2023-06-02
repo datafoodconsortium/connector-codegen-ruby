@@ -27,6 +27,18 @@ class DataFoodConsortium::Connector::Connector
 
     include Singleton
 
+    # used to prefix properties
+    # so the DFC's context can be used.
+    # See https://github.com/datafoodconsortium/connector-ruby/issues/11.
+    INPUT_CONTEXT = {
+      "dfc-b" => "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#",
+      "dfc-p" => "http://static.datafoodconsortium.org/ontologies/DFC_ProductOntology.owl#",
+      "dfc-t" => "http://static.datafoodconsortium.org/ontologies/DFC_TechnicalOntology.owl#",
+      "dfc-m" => "http://static.datafoodconsortium.org/data/measures.rdf#",
+      "dfc-pt" => "http://static.datafoodconsortium.org/data/productTypes.rdf#",
+      "dfc-f" => "http://static.datafoodconsortium.org/data/facets.rdf#",
+    }.freeze
+
     attr_accessor :context
 
     attr_reader :FACETS
@@ -49,26 +61,29 @@ class DataFoodConsortium::Connector::Connector
         @PRODUCT_TYPES = loadThesaurus(data)
     end
 
+    # Look up a facet, measure or product type that has been loaded already.
+    def concept(id)
+      # The parser stores some ids abbreviated and some in full.
+      short_id = id.dup
+      full_id = id.dup
+      INPUT_CONTEXT.each do |short, full|
+        full_id.sub!("#{short}:", full)
+        short_id.sub!(full, "#{short}:")
+      end
+
+      @parser.findParsedConcept(id) ||
+        @parser.findParsedConcept(short_id) ||
+        @parser.findParsedConcept(full_id)
+    end
+
     private
 
     def initialize()
         super()
 
-        # used to prefix properties
-        # so the DFC's context can be used.
-        # See https://github.com/datafoodconsortium/connector-ruby/issues/11.
-        inputContext = {
-            "dfc-b" => "http://static.datafoodconsortium.org/ontologies/DFC_BusinessOntology.owl#",
-            "dfc-p" => "http://static.datafoodconsortium.org/ontologies/DFC_ProductOntology.owl#",
-            "dfc-t" => "http://static.datafoodconsortium.org/ontologies/DFC_TechnicalOntology.owl#",
-            "dfc-m" => "http://static.datafoodconsortium.org/data/measures.rdf#",
-		    "dfc-pt" => "http://static.datafoodconsortium.org/data/productTypes.rdf#",
-		    "dfc-f" => "http://static.datafoodconsortium.org/data/facets.rdf#"
-        }
-
         @context = "http://static.datafoodconsortium.org/ontologies/context.json"
 
-        @exporter = DataFoodConsortium::Connector::JsonLdSerializer.new(@context, inputContext)
+        @exporter = DataFoodConsortium::Connector::JsonLdSerializer.new(@context, INPUT_CONTEXT)
         @parser = DataFoodConsortium::Connector::SKOSParser.new
 
         @FACETS = []
@@ -79,5 +94,4 @@ class DataFoodConsortium::Connector::Connector
     def loadThesaurus(data)
         return @parser.parse(data[0]["@graph"])
     end
-    
 end
